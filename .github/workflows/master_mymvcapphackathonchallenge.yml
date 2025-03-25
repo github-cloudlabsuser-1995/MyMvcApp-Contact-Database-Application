@@ -24,16 +24,16 @@ jobs:
         run: dotnet restore
 
       - name: Build and publish
-        run: dotnet publish -c Release -o ./bin/Release/net8.0/MyMvcApp
+        run: dotnet publish -c Release -o ./bin/Release/net8.0/MyMvcAppHackathonChallenge
 
       - name: Verify publish directory
-        run: dir ./bin/Release/net8.0/MyMvcApp
+        run: dir ./bin/Release/net8.0/MyMvcAppHackathonChallenge
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: ASP-app
-          path: ./bin/Release/net8.0/MyMvcApp
+          path: ./bin/Release/net8.0/MyMvcAppHackathonChallenge
 
   deploy:
     runs-on: windows-latest
@@ -64,4 +64,4 @@ jobs:
         with:
           app-name: 'MyMvcAppHackathonChallenge'
           slot-name: 'Production'
-          package: ./bin/Release/net8.0/MyMvcApp
+          package: ./bin/Release/net8.0/MyMvcAppHackathonChallenge
