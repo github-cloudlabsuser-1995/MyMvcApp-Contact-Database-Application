@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: windows-latest
     permissions:
-      contents: read # Esto es requerido para actions/checkout
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
@@ -18,19 +18,22 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x' # Asegúrate de usar la versión correcta de .NET
+          dotnet-version: '8.0.x'
 
       - name: Restore dependencies
         run: dotnet restore
 
       - name: Build and publish
-        run: dotnet publish -c Release -o D:\a\MyMvcApp-Contact-Databse-Application\MyMvcApp-Contact-Databse-Application\bin\Release\net8.0\MyMvcApp
+        run: dotnet publish -c Release -o ./bin/Release/net8.0/MyMvcApp
+
+      - name: Verify publish directory
+        run: dir ./bin/Release/net8.0/MyMvcApp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: ASP-app
-          path: D:\a\MyMvcApp-Contact-Databse-Application\MyMvcApp-Contact-Databse-Application\bin\Release\net8.0\MyMvcApp
+          path: ./bin/Release/net8.0/MyMvcApp
 
   deploy:
     runs-on: windows-latest
@@ -39,8 +42,8 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write # Esto es requerido para solicitar el JWT
-      contents: read # Esto es requerido para actions/checkout
+      id-token: write
+      contents: read
 
     steps:
       - name: Download artifact from build job
@@ -61,4 +64,4 @@ jobs:
         with:
           app-name: 'MyMvcAppHackathonChallenge'
           slot-name: 'Production'
-          package: D:\a\MyMvcApp-Contact-Databse-Application\MyMvcApp-Contact-Databse-Application\bin\Release\net8.0\MyMvcApp
+          package: ./bin/Release/net8.0/MyMvcApp
